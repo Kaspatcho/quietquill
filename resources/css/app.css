@@ -1,0 +1,73 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+[x-cloak] {
+    display: none;
+}
+
+.post-body h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    @apply font-bold leading-tight;
+}
+
+.post-body h1 {
+    @apply text-4xl;
+}
+
+.post-body h2 {
+    @apply text-3xl;
+}
+
+.post-body h3 {
+    @apply text-2xl;
+}
+
+.post-body h4 {
+    @apply text-xl;
+}
+
+.post-body h5 {
+    @apply text-lg;
+}
+
+.post-body h6 {
+    @apply text-base;
+}
+
+.post-body hr {
+    @apply my-4;
+}
+
+.post-body p {
+    @apply text-gray-600;
+}
+
+.post-body a {
+    @apply text-blue-600 underline;
+}
+
+.post-body li {
+    @apply text-gray-600 ml-6 list-disc;
+}
+
+.post-body li:has(input[type="checkbox"]) {
+    @apply list-none;
+}
+
+.post-body li:has(input[type="checkbox"]:checked) {
+    @apply line-through opacity-50;
+}
+
+.post-body pre,
+blockquote {
+    @apply bg-gray-200 p-4 rounded my-2;
+}
+
+.post-body blockquote {
+    @apply italic;
+}

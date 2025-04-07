@@ -1,0 +1,1 @@
+<x-post :title="$post->title" :body="$post->body" />
