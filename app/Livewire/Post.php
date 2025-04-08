@@ -3,15 +3,17 @@
 namespace App\Livewire;
 
 use Livewire\Component;
-use Str;
+use App\Models\Post as PostModel;
 
 class Post extends Component
 {
     public $post;
 
-    public function mount(\App\Models\Post $post)
+    public function mount(string $post)
     {
-        $this->post = $post;
+        $this->post = PostModel::where('id', $post)
+            ->where('user_id', auth()->user()->id)
+            ->firstOrfail();
     }
 
     public function render()

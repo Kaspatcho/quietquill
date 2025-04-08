@@ -22,9 +22,8 @@ class AddPost extends Component
             return;
         }
 
-        $post = Post::where('id', $post_id)
-            ->where('user_id', auth()->user()->id)
-            ->firstOrFail();
+        $post = Post::findOrFail($post_id);
+        abort_if(auth()->user()->id !== $post->user_id, 403);
 
         $this->id = $post->id;
         $this->title = $post->title;
@@ -42,8 +41,9 @@ class AddPost extends Component
         $this->validate();
 
         if ($this->id) {
-            $post = Post::where('id', $this->id)
-                ->where('user_id', auth()->user()->id)->first();
+            $post = Post::findOrFail($this->id);
+            abort_if(auth()->user()->id !== $post->user_id, 403);
+
             $post->title = $this->title;
             $post->body = $this->body;
             $post->save();
@@ -61,14 +61,10 @@ class AddPost extends Component
 
     public function delete()
     {
-        if(!$this->id) {
-            return;
-        }
+        abort_if(!$this->id, 404);
+        abort_if(auth()->user()->id !== $this->id, 403);
 
-        Post::where('id', $this->id)
-            ->where('user_id', auth()->user()->id)
-            ->firstOrFail()
-            ->delete();
+        Post::findOrFail($this->id)->delete();
 
         return redirect(route('dashboard'));
     }
