@@ -31,11 +31,11 @@ class PostDisplayTest extends TestCase
 
         // Assert that the post is displayed correctly
         $response->assertSee($post->title);
-        $response->assertSee($post->body);
+        $response->assertSee($post->body, false);
     }
 
     /**
-     * Test that a user can view another user's post.
+     * Test that a user can't view another user's post.
      */
     public function test_user_cannot_view_another_users_post()
     {
