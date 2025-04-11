@@ -19,6 +19,10 @@
                     <x-nav-link href="{{ route('posts.create') }}" :active="request()->routeIs('posts.create')">
                         {{ __('Add Post') }}
                     </x-nav-link>
+
+                    <x-nav-link href="{{ route('tags.create') }}" :active="request()->routeIs('tags.create')">
+                        {{ __('Add Tag') }}
+                    </x-nav-link>
                 </div>
             </div>
 

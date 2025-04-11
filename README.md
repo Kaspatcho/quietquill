@@ -13,7 +13,7 @@ No likes, no followers, no noise. Just a place to write.
 - 🕰️ Timestamped entries – See your journey over time.
 - 🌙 Dark mode friendly (because some thoughts come at night).
 - 🔍 Search your past thoughts.
-- 🏷️ Tag support for better organization (coming soon).
+- 🏷️ Tag support for better organization.
 
 ---
 

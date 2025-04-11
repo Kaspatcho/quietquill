@@ -38,4 +38,9 @@ class Post extends Model
             'updated_at' => $this->updated_at->timestamp,
         ]);
     }
+
+    public function tags()
+    {
+        return $this->belongsToMany(Tag::class, PostTag::class);
+    }
 }

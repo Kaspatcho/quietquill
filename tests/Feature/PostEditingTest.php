@@ -4,6 +4,7 @@
 namespace Tests\Feature;
 
 use App\Models\Post;
+use App\Models\Tag;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
@@ -25,6 +26,7 @@ class PostEditingTest extends TestCase
 
         // Create a new post
         $post = Post::factory()->create(['user_id' => $user->id]);
+        Tag::factory()->createOne();
 
         // Visit the post edit page
         $response = $this->get(route('posts.edit', $post->id));
@@ -34,6 +36,7 @@ class PostEditingTest extends TestCase
         Livewire::test('add-post', ['post_id' => $post->id])
             ->set('title', 'Updated Title')
             ->set('body', 'Updated Body')
+            ->set('tags', [1])
             ->call('save')
             ->assertRedirect(route('dashboard'));
 

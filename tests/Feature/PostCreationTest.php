@@ -4,6 +4,7 @@
 namespace Tests\Feature;
 
 use App\Models\Post;
+use App\Models\Tag;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
@@ -22,6 +23,8 @@ class PostCreationTest extends TestCase
         // Create a user and log them in
         $this->actingAs($user = User::factory()->create());
 
+        Tag::factory()->createOne();
+
         // Visit the post creation page
         $response = $this->get(route('posts.create'));
         $response->assertStatus(200);
@@ -30,6 +33,7 @@ class PostCreationTest extends TestCase
         Livewire::test('add-post')
             ->set('title', 'My New Post')
             ->set('body', 'This is my new post.')
+            ->set('tags', [1])
             ->call('save')
             ->assertRedirect(route('dashboard'));
 

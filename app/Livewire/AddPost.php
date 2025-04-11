@@ -2,6 +2,7 @@
 
 namespace App\Livewire;
 
+use App\Models\Tag;
 use App\Models\Post;
 use Livewire\Component;
 
@@ -9,10 +10,13 @@ class AddPost extends Component
 {
     public $id;
     public $title = 'teste titulo';
+    public $tags = [];
     public $body = '# Teste' . PHP_EOL . PHP_EOL . '**teste** besta';
 
     public $rules = [
         'title' => 'required',
+        'tags' => 'required|array|min:1',
+        'tags.*' => 'required|exists:tags,id',
         'body' => 'required',
     ];
 
@@ -28,12 +32,21 @@ class AddPost extends Component
         $this->id = $post->id;
         $this->title = $post->title;
         $this->body = $post->body;
+        $this->tags = $post->tags->pluck('id')->toArray();
     }
 
     public function render()
     {
         return view('livewire.add-post')
+            ->with([
+                'allTags' => Tag::all(),
+            ])
             ->layout('layouts.app');
+    }
+
+    public function checkedTag($tag_id)
+    {
+        return in_array($tag_id, $this->tags);
     }
 
     public function save()
@@ -47,6 +60,7 @@ class AddPost extends Component
             $post->title = $this->title;
             $post->body = $this->body;
             $post->save();
+            $post->tags()->sync($this->tags);
 
             return redirect(route('dashboard'));
         }
@@ -54,7 +68,7 @@ class AddPost extends Component
         auth()->user()->posts()->create([
             'title' => $this->title,
             'body' => $this->body
-        ]);
+        ])->tags()->attach($this->tags);
 
         return redirect(route('dashboard'));
     }

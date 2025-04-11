@@ -52,6 +52,26 @@ class DashboardTest extends TestCase
         $response->assertSee(\Str::limit($post->body, 50));
     }
 
+    public function test_user_cannot_see_other_users_posts_on_the_dashboard()
+    {
+        // Create two users
+        $user1 = User::factory()->create();
+        $user2 = User::factory()->create();
+
+        // Create a new post for user1
+        $post = Post::factory()->create(['user_id' => $user1->id]);
+
+        // Log in as user2
+        $this->actingAs($user2);
+
+        // Visit the dashboard page
+        $response = $this->get(route('dashboard'));
+        $response->assertStatus(200);
+
+        // Assert that the post is not displayed on the dashboard
+        $response->assertDontSee($post->title);
+    }
+
     /**
      * Test that a guest user cannot view the dashboard.
      */
@@ -60,32 +80,5 @@ class DashboardTest extends TestCase
         // Visit the dashboard page as a guest user
         $response = $this->get(route('dashboard'));
         $response->assertRedirect(route('login'));
-    }
-
-    /**
-     * Test that a user can create a new post from the dashboard.
-     */
-    public function test_user_can_create_a_new_post_from_the_dashboard()
-    {
-        // Create a user and log them in
-        $user = User::factory()->create();
-        $this->actingAs($user);
-
-        // Visit the dashboard page
-        $response = $this->get(route('dashboard'));
-        $response->assertStatus(200);
-
-        // Create a new post using Livewire
-        Livewire::test('add-post')
-            ->set('title', 'New Post')
-            ->set('body', 'This is a new post.')
-            ->call('save')
-            ->assertRedirect(route('dashboard'));
-
-        // Assert that the post was created successfully
-        $post = Post::firstOrFail();
-        $this->assertEquals($user->id, $post->user_id);
-        $this->assertEquals('New Post', $post->title);
-        $this->assertEquals('This is a new post.', $post->body);
     }
 }

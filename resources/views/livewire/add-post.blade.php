@@ -30,6 +30,19 @@
                                 <x-input id="title" type="text" class="mt-1 block w-full" wire:model.live="title" required autofocus />
                                 <x-input-error for="title" class="mt-2" />
 
+                                <x-label class="mt-2" for="tags" value="{{ __('Tags') }}" />
+                                <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2 my-3">
+                                    @foreach ($allTags as $tag)
+                                        <div x-data="{ checked: @js(in_array($tag->id, $tags)) }" class="flex items-center">
+                                            <input type="checkbox" id="tag-{{ $tag->id }}" class="mr-2 hidden" x-bind:checked="checked" @click="checked = !checked" wire:model="tags" value="{{ $tag->id }}">
+                                            <label for="tag-{{ $tag->id }}" class="cursor-pointer px-2 py-1 rounded-full border-2 text-gray-900 dark:text-white" :class="{ 'bg-blue-500 dark:bg-indigo-500 text-white': checked }" style="border-color: {{ $tag->color }}">
+                                                {{ $tag->name }}
+                                            </label>
+                                        </div>
+                                    @endforeach
+                                </div>
+                                <x-input-error for="tags" class="mt-2" />
+
                                 <x-label for="body" value="{{ __('Body') }}" />
                                 <textarea id="body" class="mt-1 block w-full dark:bg-gray-800 dark:text-white dark:focus:border-indigo-400" required rows="10" wire:model.live="body"></textarea>
                                 <x-input-error for="body" class="mt-2" />
