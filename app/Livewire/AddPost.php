@@ -76,9 +76,10 @@ class AddPost extends Component
     public function delete()
     {
         abort_if(!$this->id, 404);
-        abort_if(auth()->user()->id !== $this->id, 403);
 
-        Post::findOrFail($this->id)->delete();
+        $post = Post::findOrFail($this->id);
+        abort_if(auth()->user()->id !== $post->user_id, 403);
+        $post->delete();
 
         return redirect(route('dashboard'));
     }
